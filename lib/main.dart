@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:reown_appkit/reown_appkit.dart';
+import 'package:reown_appkit_test/deep_link_handler.dart';
 
 const appkitProjectId = String.fromEnvironment('PROJECT_ID');
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  DeepLinkHandler.initListener();
   runApp(const MyApp());
 }
 
@@ -33,9 +36,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final ReownAppKitModal _appKitModal;
   @override
-  Widget build(BuildContext context) {
-    final appKitModal = ReownAppKitModal(
+  void initState() {
+    super.initState();
+    _appKitModal = ReownAppKitModal(
       context: context,
       projectId: appkitProjectId,
       metadata: const PairingMetadata(
@@ -49,27 +54,39 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       enableAnalytics: false,
-      logLevel: LogLevel.debug,
+      logLevel: LogLevel.all,
     );
 
+    DeepLinkHandler.init(_appKitModal);
+
+    _appKitModal.onModalConnect.subscribe(_onModalConnect);
+  }
+
+  void _onModalConnect(ModalConnect? event) async {
+    debugPrint('[ExampleApp] _onModalConnect ${event?.session.toJson()}');
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: FutureBuilder(
-          future: appKitModal.init(),
+          future: _appKitModal.init(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AppKitModalConnectButton(appKit: appKitModal),
-                  AppKitModalNetworkSelectButton(appKit: appKitModal),
+                  AppKitModalConnectButton(appKit: _appKitModal),
+                  AppKitModalNetworkSelectButton(appKit: _appKitModal),
                   Visibility(
-                    visible: appKitModal.isConnected,
+                    visible: _appKitModal.isConnected,
                     child: AppKitModalAccountButton(
-                      appKitModal: appKitModal,
+                      appKitModal: _appKitModal,
                     ),
                   )
                 ],
