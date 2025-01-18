@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 
-const apiKey = String.fromEnvironment('PROJECT_ID');
+const appkitProjectId = String.fromEnvironment('PROJECT_ID');
 
 void main() {
   runApp(const MyApp());
@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
           linkMode: false,
         ),
       ),
+      enableAnalytics: false,
       logLevel: LogLevel.debug,
     );
 
