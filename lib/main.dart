@@ -37,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final ReownAppKitModal _appKitModal;
+
   @override
   void initState() {
     super.initState();
@@ -59,12 +60,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
     DeepLinkHandler.init(_appKitModal);
 
-    _appKitModal.onModalConnect.subscribe(_onModalConnect);
-  }
-
-  void _onModalConnect(ModalConnect? event) async {
-    debugPrint('[ExampleApp] _onModalConnect ${event?.session.toJson()}');
-    setState(() {});
+    _appKitModal.onModalConnect.subscribe((event) {
+      setState(() {});
+    });
+    _appKitModal.onModalDisconnect.subscribe((event) {
+      setState(() {});
+    });
+    _appKitModal.onModalUpdate.subscribe((event) {
+      setState(() {});
+    });
+    _appKitModal.onModalNetworkChange.subscribe((event) {
+      setState(() {});
+    });
+    _appKitModal.onModalError.subscribe((event) {
+      setState(() {});
+    });
   }
 
   @override
@@ -75,26 +85,28 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: FutureBuilder(
-          future: _appKitModal.init(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppKitModalConnectButton(appKit: _appKitModal),
-                  AppKitModalNetworkSelectButton(appKit: _appKitModal),
-                  Visibility(
-                    visible: _appKitModal.isConnected,
-                    child: AppKitModalAccountButton(
-                      appKitModal: _appKitModal,
-                    ),
-                  )
-                ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
+        future: _appKitModal.init(),
+        builder: (context, snapshot) {
+          debugPrint('=================Rebuild================: $snapshot');
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppKitModalNetworkSelectButton(appKit: _appKitModal),
+                AppKitModalConnectButton(appKit: _appKitModal),
+                Visibility(
+                  visible: _appKitModal.isConnected,
+                  child: AppKitModalAccountButton(
+                    appKitModal: _appKitModal,
+                  ),
+                )
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }
