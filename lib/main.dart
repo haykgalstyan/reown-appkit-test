@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 
-const appkitProjectId = '33f39e4a5bfb7d9bafbaa7ac3b99f799';
+const apiKey = String.fromEnvironment('PROJECT_ID');
 
 void main() {
   runApp(const MyApp());
