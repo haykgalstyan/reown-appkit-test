@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:reown_appkit_test/deep_link_handler.dart';
 
-const appkitProjectId = String.fromEnvironment('PROJECT_ID');
+const appkitProjectId = '82cca73d1ffa621af4c28af077d220e1';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

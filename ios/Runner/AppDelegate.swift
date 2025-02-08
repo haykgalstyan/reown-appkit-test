@@ -7,7 +7,10 @@ import UIKit
     private var eventsChannel: FlutterEventChannel?
     private let linkStreamHandler = LinkStreamHandler()
     
-    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    override func application(
+        _ application: UIApplication,
+         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         GeneratedPluginRegistrant.register(with: self)
         
         let controller = window.rootViewController as! FlutterViewController
@@ -24,11 +27,19 @@ import UIKit
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    override func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+    ) -> Bool {
         return linkStreamHandler.handleLink(url.absoluteString)
     }
     
-    override func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    override func application(
+        _ application: UIApplication,
+        continue userActivity: NSUserActivity,
+        restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+    ) -> Bool {
         if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
             handleIncomingUniversalLink(userActivity: userActivity)
             return true
