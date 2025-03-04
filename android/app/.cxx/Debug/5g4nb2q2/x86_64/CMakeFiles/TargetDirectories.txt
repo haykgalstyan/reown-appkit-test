@@ -1,0 +1,2 @@
+/Users/haykgalstyan/Work/reown_appkit_test/android/app/.cxx/Debug/5g4nb2q2/x86_64/CMakeFiles/edit_cache.dir
+/Users/haykgalstyan/Work/reown_appkit_test/android/app/.cxx/Debug/5g4nb2q2/x86_64/CMakeFiles/rebuild_cache.dir

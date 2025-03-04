@@ -53,19 +53,19 @@
             <data android:mimeType="text/plain"/>
         </intent>
 
-        <package android:name="app.phantom" />
+<!--        <package android:name="app.phantom" />-->
 
-        <package android:name="com.solflare.mobile" />
-        <package android:name="app.phantom" />
-        <package android:name="org.toshi" /> <!-- Coinbase -->
-        <package android:name="io.metamask" />
+<!--        <package android:name="com.solflare.mobile" />-->
+<!--        <package android:name="app.phantom" />-->
+<!--        <package android:name="org.toshi" /> &lt;!&ndash; Coinbase &ndash;&gt;-->
+<!--        <package android:name="io.metamask" />-->
         <package android:name="com.wallet.crypto.trustapp" />
-        <package android:name="exodusmovement.exodus" />
-        <package android:name="com.bitcoin.mwallet" />
-        <package android:name="io.gnosis.safe" />
-        <package android:name="me.rainbow" />
-        <package android:name="com.uniswap.mobile" />
-        <package android:name="com.binance.dev" />
+<!--        <package android:name="exodusmovement.exodus" />-->
+<!--        <package android:name="com.bitcoin.mwallet" />-->
+<!--        <package android:name="io.gnosis.safe" />-->
+<!--        <package android:name="me.rainbow" />-->
+<!--        <package android:name="com.uniswap.mobile" />-->
+<!--        <package android:name="com.binance.dev" />-->
 
     </queries>
 </manifest>

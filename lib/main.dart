@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:reown_appkit_test/deep_link_handler.dart';
 
-const appkitProjectId = '82cca73d1ffa621af4c28af077d220e1';
+const appkitProjectId = '';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +17,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -36,11 +32,59 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late final ReownAppKitModal _appKitModal;
+  late ReownAppKitModal _appKitModal;
+  late Future<void> _appKitInit;
 
   @override
   void initState() {
     super.initState();
+    _initAppKit();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder(
+        future: _appKitInit,
+        builder: (context, snapshot) {
+          debugPrint('=================Rebuild================: $snapshot');
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppKitModalNetworkSelectButton(appKit: _appKitModal),
+                AppKitModalConnectButton(appKit: _appKitModal),
+                Visibility(
+                  visible: _appKitModal.isConnected,
+                  child: AppKitModalAccountButton(
+                    appKitModal: _appKitModal,
+                  ),
+                ),
+                OutlinedButton(
+                  onPressed: () async {
+                    // debugPrint('Removing Solana networks...');
+                    // ReownAppKitModalNetworks.removeSupportedNetworks('solana');
+                    // debugPrint('AppKit dispose...');
+                    await _appKitModal.dispose();
+
+                    await Future.delayed(const Duration(seconds: 5));
+
+                    debugPrint('AppKit init...');
+                    _initAppKit();
+                  },
+                  child: Text('Remove Solana networks'),
+                ),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
+  }
+
+  void _initAppKit() {
     _appKitModal = ReownAppKitModal(
       context: context,
       projectId: appkitProjectId,
@@ -57,6 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
       enableAnalytics: false,
       logLevel: LogLevel.all,
     );
+
+    _appKitInit = _appKitModal.init();
 
     DeepLinkHandler.init(_appKitModal);
 
@@ -75,38 +121,5 @@ class _MyHomePageState extends State<MyHomePage> {
     _appKitModal.onModalError.subscribe((event) {
       setState(() {});
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: FutureBuilder(
-        future: _appKitModal.init(),
-        builder: (context, snapshot) {
-          debugPrint('=================Rebuild================: $snapshot');
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AppKitModalNetworkSelectButton(appKit: _appKitModal),
-                AppKitModalConnectButton(appKit: _appKitModal),
-                Visibility(
-                  visible: _appKitModal.isConnected,
-                  child: AppKitModalAccountButton(
-                    appKitModal: _appKitModal,
-                  ),
-                )
-              ],
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-    );
   }
 }
